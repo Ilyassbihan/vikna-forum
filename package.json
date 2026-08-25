@@ -8,14 +8,17 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "helmet": "^7.1.0",
-    "cors": "^2.8.5",
-    "express-rate-limit": "^7.4.0",
     "cookie-parser": "^1.4.6",
-    "ws": "^8.17.0",
-    "validator": "^13.11.0"
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "validator": "^13.11.0",
+    "ws": "^8.17.0"
   }
 }
