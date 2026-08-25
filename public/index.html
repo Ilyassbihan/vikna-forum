@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>۞ Vikna Forum</title>
+<link rel="stylesheet" href="./style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<header class="header">
+  <div class="h-left"><span class="star">۞</span> ILYAS SBIHAN <small>· VIKNA</small></div>
+  <div class="h-right">
+    <div class="badge" id="userBadge">۞ UNAUTH</div>
+    <button class="btn outline sm hidden" id="adminBtn" onclick="go('admin')">Admin</button>
+    <button class="btn sm hidden" id="logoutBtn" onclick="logout()">Logout</button>
+    <button class="btn sm" id="loginBtn" onclick="go('auth')">Login</button>
+  </div>
+</header>
+<div class="main" id="app"></div>
+
+<div class="modal-bg" id="welcomeModal">
+  <div class="modal">
+    <div class="big-star">۞</div>
+    <h1 style="font-family:'Russo One',sans-serif;color:var(--gold);margin:8px 0;font-size:28px">Vikna Forum</h1>
+    <p style="color:var(--muted);font-size:11px;letter-spacing:1px">Secure Cryptographic Messaging Platform · Founded by Ilyas Sbihan</p>
+    <p style="font-size:12px;color:#cbb88a;margin:14px 0;line-height:1.6">Your communications are encrypted and private.<br>PBKDF2 150k · sql.js · localStorage · 100% static.<br>Click below to enter and start ambient audio.</p>
+    <button class="btn" style="margin-top:8px;padding:11px 24px" onclick="startAudio()">🔊 OK, Start Audio</button>
+  </div>
+</div>
+
+<iframe id="ytAudio" width="1" height="1" style="position:fixed;left:-10px;bottom:-10px;opacity:0.01;pointer-events:none" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<button class="audio-toggle" id="audioToggle" onclick="toggleAudio()">🔇 Mute Audio</button>
+
+<div class="chat-bubble" id="chatBubble" onclick="toggleChat()">💬 <span class="badge-count hidden" id="chatBadge">0</span></div>
+<div class="chat-panel hidden" id="chatPanel">
+  <div class="chat-header"><span>۞ Messages</span><span style="display:flex;gap:6px"><button class="btn sm" id="broadcastBtn" onclick="broadcastMsg()" style="display:none">📢 All</button><button class="btn ghost sm" onclick="toggleChat()">✕</button></span></div>
+  <div style="display:flex;flex:1;overflow:hidden">
+    <div style="width:130px;border-right:1px solid var(--border);overflow-y:auto;background:var(--card)" id="chatUserList"></div>
+    <div style="flex:1;display:flex;flex-direction:column;overflow:hidden">
+      <div class="msg-area" id="msgArea"><div style="color:var(--muted);font-size:11px;text-align:center;margin-top:20px">Select a user to chat</div></div>
+      <div style="display:flex;gap:6px;padding:8px;background:var(--card);border-top:1px solid var(--border)">
+        <input id="chatInput" placeholder="Type a message...">
+        <button class="btn sm" onclick="sendMsg()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="./app.js" type="module"></script>
+</body>
+</html>

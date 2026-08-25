@@ -1,0 +1,6 @@
+node_modules/
+vikna.db
+vikna.db-shm
+vikna.db-wal
+server.log
+.DS_Store
