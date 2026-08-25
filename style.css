@@ -70,7 +70,29 @@ th{color:var(--gold);font-family:'Russo One',sans-serif;font-weight:400;letter-s
 .hidden{display:none !important}
 .err{color:#ff6b6b;font-size:12px;margin:6px 0}
 .ok{color:#6bff8a;font-size:12px;margin:6px 0}
-.auth-wrap{max-width:420px;margin:36px auto}
+.auth-wrap{max-width:440px;margin:32px auto}
+.auth-card{max-width:460px;margin:28px auto;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:18px;padding:26px 22px;box-shadow:0 16px 40px rgba(0,0,0,0.5),0 0 0 1px rgba(212,175,55,0.08);position:relative;overflow:hidden}
+.auth-card::before{content:"۞";position:absolute;right:14px;top:10px;font-size:84px;color:var(--gold);opacity:0.04;pointer-events:none}
+.auth-head{text-align:center;margin-bottom:16px}
+.auth-head .auth-star{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 10px;box-shadow:0 4px 14px rgba(212,175,55,0.35)}
+.auth-head h2{font-family:'Russo One',sans-serif;color:var(--gold);font-size:24px;margin-bottom:4px;letter-spacing:0.5px}
+.auth-head p{font-size:11px;color:var(--muted);letter-spacing:0.8px}
+.auth-tabs{display:flex;background:var(--dark);border:1px solid var(--border);border-radius:12px;padding:4px;gap:4px;margin:14px 0 16px}
+.auth-tab{flex:1;padding:9px;border-radius:8px;border:none;background:transparent;color:var(--muted);font-family:'Roboto Mono',monospace;font-weight:700;font-size:12px;cursor:pointer;transition:0.2s}
+.auth-tab.active{background:var(--gold);color:#1a0a00;box-shadow:0 2px 10px rgba(212,175,55,0.3)}
+.field{position:relative;margin:10px 0}
+.field input{width:100%;background:#0f0a0a;border:1.5px solid var(--border);color:var(--text);padding:12px 42px 12px 42px;border-radius:12px;font-family:'Roboto Mono',monospace;font-size:13px;transition:0.18s}
+.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.14);background:#140f0d}
+.field input::placeholder{color:#6a5a3a}
+.field-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gold);opacity:0.85;font-size:14px;pointer-events:none}
+.eye-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(212,175,55,0.1);border:1px solid var(--border);color:var(--gold);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:0.15s}
+.eye-btn:hover{background:rgba(212,175,55,0.2);border-color:var(--gold)}
+.auth-btn{width:100%;margin-top:12px;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a0a00;border:1px solid var(--gold);border-radius:12px;font-family:'Roboto Mono',monospace;font-weight:800;font-size:13px;letter-spacing:0.6px;cursor:pointer;transition:0.18s;box-shadow:0 6px 18px rgba(212,175,55,0.25)}
+.auth-btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(212,175,55,0.35)}
+.auth-btn:active{transform:none}
+.auth-msg{min-height:18px;margin:10px 0 2px;text-align:center}
+.auth-foot{ text-align:center;margin-top:14px;font-size:11px;color:var(--muted)}
+.auth-foot b{color:var(--gold)}
 .shimmer{position:relative;overflow:hidden}
 .shimmer::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.08),transparent);transform:translateX(-100%);animation:shimmer 2.2s infinite}
 @keyframes shimmer{100%{transform:translateX(100%)}}

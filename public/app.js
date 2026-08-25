@@ -87,27 +87,57 @@ function render(){
   return renderSubreddits();
 }
 
+window.togglePw=()=>{
+  const i=$('#ap'); const b=$('#eyeBtn');
+  if(!i) return; const isPw=i.type==='password'; i.type=isPw?'text':'password';
+  if(b) b.textContent=isPw?'🙈':'👁'; i.focus();
+};
 function renderAuth(mode='login'){
   let m=mode;
   function draw(msg='', ok=''){
-    app.innerHTML=`<div class="card auth-wrap" style="text-align:center;max-width:420px;margin:36px auto"><h2>۞ ${m==='login'?'Login':'Register'}</h2>
-      <input id="au" placeholder="Username (3-20, a-z0-9_-)" style="margin-top:10px">
-      <input id="ap" type="password" placeholder="Password (3-72 chars)" style="margin-top:8px">
-      ${msg?`<div class="err">${esc(msg)}</div>`:''}${ok?`<div class="ok">${esc(ok)}</div>`:''}
-      <button class="btn" style="width:100%;margin-top:10px" id="abtn">${m==='login'?'Login':'Register'}</button>
-      <p style="margin-top:12px"><span class="link" style="color:var(--gold);cursor:pointer" id="sw">${m==='login'?'Create account':'Have account? Login'}</span></p>
-      <p style="margin-top:8px"><button class="btn outline sm" onclick="go('subreddits')">← Back</button></p>
-      <p style="margin-top:10px;font-size:11px;color:var(--muted)">Founder: vikna / 1342@#..</p>
+    app.innerHTML=`
+    <div class="auth-card">
+      <div class="auth-head">
+        <div class="auth-star">۞</div>
+        <h2>${m==='login'?'Welcome back':'Create account'}</h2>
+        <p>${m==='login'?'Vikna Communication System · Secure login':'Join Vikna Forum · Founded by Ilyas Sbihan'}</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab ${m==='login'?'active':''}" id="tabLogin">Login</button>
+        <button class="auth-tab ${m==='register'?'active':''}" id="tabReg">Register</button>
+      </div>
+      <div class="field">
+        <span class="field-icon">👤</span>
+        <input id="au" placeholder="Username" autocomplete="username" maxlength="20">
+      </div>
+      <div class="field">
+        <span class="field-icon">🔒</span>
+        <input id="ap" type="password" placeholder="Password" autocomplete="${m==='login'?'current-password':'new-password'}" maxlength="72">
+        <button class="eye-btn" id="eyeBtn" type="button" onclick="togglePw()" title="Show/Hide password">👁</button>
+      </div>
+      <div class="auth-msg">${msg?`<div class="err">⚠ ${esc(msg)}</div>`:''}${ok?`<div class="ok">✓ ${esc(ok)}</div>`:''}</div>
+      <button class="auth-btn" id="abtn">${m==='login'?'🔓 LOGIN':'✦ CREATE ACCOUNT'}</button>
+      <div class="auth-foot">
+        Founder: <b>vikna</b> / <code>1342@#..</code>
+        <div style="margin-top:10px"><button class="btn outline sm" onclick="go('subreddits')">← Back to forum</button></div>
+      </div>
     </div>`;
-    $('#sw').onclick=()=>{ m=m==='login'?'register':'login'; draw(); };
+    $('#tabLogin').onclick=()=>{ m='login'; draw(); };
+    $('#tabReg').onclick=()=>{ m='register'; draw(); };
+    // focus + enter
+    setTimeout(()=>$('#au')?.focus(),30);
+    $('#au').addEventListener('keydown', e=>{ if(e.key==='Enter') $('#ap').focus(); });
+    $('#ap').addEventListener('keydown', e=>{ if(e.key==='Enter') $('#abtn').click(); });
     $('#abtn').onclick=async()=>{
       const u=$('#au').value.trim(), p=$('#ap').value;
-      if(!u||!p){ draw('Fill all fields'); return; }
+      const btn=$('#abtn'); const orig=btn.textContent;
+      if(!u||!p){ draw('Fill username and password'); return; }
       try{
+        btn.textContent='⏳ Processing...'; btn.disabled=true;
         if(m==='register'){
-          if(p.length<3){ draw('Password min 3'); return; }
+          if(p.length<3){ draw('Password min 3 chars'); return; }
           if(q("SELECT id FROM users WHERE username=? COLLATE NOCASE", [u]).length){ draw('Username already taken'); return; }
-          if(!/^[a-zA-Z0-9_-]{3,20}$/.test(u)){ draw('Username 3-20 alphanumeric _-'); return; }
+          if(!/^[a-zA-Z0-9_-]{3,20}$/.test(u)){ draw('Username: 3-20 letters, numbers, _ -'); return; }
           const {hash,salt}=await hashPassword(p);
           exec("INSERT INTO users (username,password_hash,salt,role,karma,created_at) VALUES (?,?,?,?,?,?)", [u,hash,salt,'USER',0,new Date().toISOString()]);
           m='login'; draw('','Account created — now login'); return;
@@ -121,6 +151,7 @@ function renderAuth(mode='login'){
           updateHeader(); refreshVotes(); go('subreddits');
         }
       }catch(e){ draw(e.message); }
+      finally{ btn.disabled=false; btn.textContent=orig; }
     };
   }
   draw();
