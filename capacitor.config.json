@@ -1,0 +1,12 @@
+{
+  "appId": "com.ilyassbihan.vikna",
+  "appName": "Vikna",
+  "webDir": "public",
+  "server": {
+    "url": "https://ilyassbihan.github.io/vikna-forum/",
+    "cleartext": false
+  },
+  "ios": {
+    "contentInset": "always"
+  }
+}

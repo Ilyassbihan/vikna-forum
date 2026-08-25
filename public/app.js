@@ -219,7 +219,19 @@ function renderAuth(mode='login'){
 function renderSubreddits(){
   view='subreddits'; currentSub=null; currentPost=null;
   const subs=q("SELECT s.*, u.username as creator, (SELECT COUNT(*) FROM posts WHERE subreddit_id=s.id) as post_count FROM subreddits s LEFT JOIN users u ON u.id=s.creator_id ORDER BY s.created_at DESC");
-  app.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px"><h2 style="font-family:'Russo One',sans-serif;color:var(--gold)">۞ Subreddits</h2><button class="btn sm" onclick="newSub()">+ New Subreddit</button></div>
+  app.innerHTML=`
+    <div class="card" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,var(--red),#4a0000);border-color:var(--gold);flex-wrap:wrap">
+      <img src="./icon-1024.png" style="width:56px;height:56px;border-radius:14px;border:2px solid var(--gold);box-shadow:0 4px 14px rgba(0,0,0,0.4)" alt="Vikna">
+      <div style="flex:1;min-width:160px">
+        <div style="font-family:'Russo One',sans-serif;color:var(--gold);font-size:15px">📱 Vikna iOS — Vikna.tipa</div>
+        <div style="font-size:11px;color:#f5e6c8;opacity:0.85">Andalus star • Install via TrollStore / Sideloadly • Same as website</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="./apps/Vikna.tipa" download class="btn" style="text-decoration:none;white-space:nowrap">⬇ Download .tipa</a>
+        <a href="./apps/Vikna.ipa" download class="btn outline" style="text-decoration:none;white-space:nowrap">.ipa</a>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px"><h2 style="font-family:'Russo One',sans-serif;color:var(--gold)">۞ Subreddits</h2><button class="btn sm" onclick="newSub()">+ New Subreddit</button></div>
     <div class="sub-grid">${subs.length?subs.map(s=>`<div class="sub-card" onclick="openSub(${s.id})"><h4>۞ ${esc(s.name)}</h4><p style="font-size:12px;color:var(--muted);margin:6px 0">${esc(s.description||'No description')}</p><div class="meta">by ${esc(s.creator||'?')} · ${s.post_count} posts · ${new Date(s.created_at).toLocaleDateString()}</div></div>`).join(''):`<div class="card" style="text-align:center;color:var(--muted)">No subreddits yet. Create the first one!</div>`}</div>`;
 }
 window.newSub=async()=>{

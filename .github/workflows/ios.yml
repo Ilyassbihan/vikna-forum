@@ -1,0 +1,71 @@
+name: Build Vikna iOS (Vikna.tipa)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "public/**"
+      - "capacitor.config.json"
+      - "ios/**"
+      - ".github/workflows/ios.yml"
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci || npm install
+
+      - name: Sync Capacitor iOS
+        run: |
+          npx cap sync ios
+          npx cap copy ios
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app || true
+
+      - name: Build IPA (unsigned for TrollStore)
+        run: |
+          cd ios/App
+          # Archive without code signing
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release -destination generic/platform=iOS -archivePath $RUNNER_TEMP/Vikna.xcarchive archive CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO 2>&1 | tail -50
+          # Export IPA
+          mkdir -p $RUNNER_TEMP/Payload
+          # Find .app inside archive
+          APP_PATH=$(find $RUNNER_TEMP/Vikna.xcarchive -name "*.app" -type d | head -1)
+          echo "App at $APP_PATH"
+          cp -R "$APP_PATH" $RUNNER_TEMP/Payload/
+          cd $RUNNER_TEMP && zip -r Vikna.ipa Payload > /dev/null && ls -lh Vikna.ipa
+          cp Vikna.ipa $GITHUB_WORKSPACE/public/apps/Vikna.ipa
+          cp Vikna.ipa $GITHUB_WORKSPACE/apps/Vikna.ipa 2>/dev/null || mkdir -p $GITHUB_WORKSPACE/apps && cp Vikna.ipa $GITHUB_WORKSPACE/apps/Vikna.ipa
+          # TrollStore .tipa is just .ipa renamed
+          cp $GITHUB_WORKSPACE/public/apps/Vikna.ipa $GITHUB_WORKSPACE/public/apps/Vikna.tipa
+          cp $GITHUB_WORKSPACE/apps/Vikna.ipa $GITHUB_WORKSPACE/apps/Vikna.tipa 2>/dev/null || true
+          ls -lh $GITHUB_WORKSPACE/public/apps/ $GITHUB_WORKSPACE/apps/
+
+      - name: Commit IPA to repo (apps folder)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/apps/Vikna.ipa public/apps/Vikna.tipa apps/Vikna.ipa apps/Vikna.tipa 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "build: Vikna.tipa iOS (auto) [skip ci]"
+          git push || echo "push skipped (no changes or no permission)"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vikna-tipa
+          path: |
+            public/apps/Vikna.tipa
+            public/apps/Vikna.ipa
+            apps/Vikna.tipa
